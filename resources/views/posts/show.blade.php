@@ -10,22 +10,25 @@
       <span class="label label-default" style="margin-left:15px;">Draft</span>
     @endif
     <hr />
-    <p>{{ Auth::user()->api_token }}</p>
-    <hr>
+    {{-- <p>{{ Auth::user()->api_token }}</p>
+    <hr> --}}
     <p class="lead">
       {{ $post->content }}
     </p>
     <hr />
 
     <h3>Comments:</h3>
-    <div style="margin-bottom:50px;">
+    <div style="margin-bottom:50px;" v-if="user">
       <textarea class="form-control" rows="3" name="body" placeholder="Leave a comment" v-model="commentBox"></textarea>
       <button 
         class="btn btn-success" 
         style="margin-top:10px" 
         v-on:click.prevent="postComment" >Save Comment</button>
     </div>
-
+    <div v-else>
+      para comentar debe 
+      <a href="/login">iniciar sesión</a>
+    </div>
 
     <div class="media" style="margin-top:20px;" v-for="comment in comments">
       <div class="media-left">
@@ -58,6 +61,7 @@
       },
       mounted(){
         this.getComments();
+        this.listen();
       },
       methods: {
         getComments(){
@@ -81,6 +85,12 @@
           .catch(function (error) {
             console.log(error);
           });
+        },
+        listen(){
+            Echo.channel('post.'+this.post.id)
+              .listen('NewComment', (comment) => {
+                  this.comments.unshift(comment);
+              })
         }
       }
   });
