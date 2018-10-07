@@ -10,6 +10,8 @@
       <span class="label label-default" style="margin-left:15px;">Draft</span>
     @endif
     <hr />
+    <p>{{ Auth::user()->api_token }}</p>
+    <hr>
     <p class="lead">
       {{ $post->content }}
     </p>

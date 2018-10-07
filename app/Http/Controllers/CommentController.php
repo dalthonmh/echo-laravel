@@ -15,14 +15,13 @@ class CommentController extends Controller
 
     public function store(Request $request, Post $post)
     {
-    	return compact('request','post');
-        // $comment = $post->comments()->create([
-    	// 	'body' => $request->body,
-    	// 	'user_id' => Auth::id()
-    	// ]);
+        $comment = $post->comments()->create([
+    		'body' => $request->body,
+    		'user_id' => Auth::id()
+    	]);
 
-    	// $comment = Comment::where('id', $comment->id)->with('user')->first();
+    	$comment = Comment::where('id', $comment->id)->with('user')->first();
 
-    	// return $comment->toJson();
+    	return $comment->toJson();
     }
 }
